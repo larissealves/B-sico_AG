@@ -38,12 +38,15 @@ class Individuo():
         soma_espaco_disponivel = 0
         for g in range(len(caracteristicas_grupo)):
             for i in range(len(self.cromossomo)):
-                notaAluno = 0    
+                notaAluno = 0  
+                
                 ''' os cromossomos = 1
                 desses quais realmente tem as caracteristicas definidas progrupo??
                 verifico e dou uma nota com base nisso. 
                 
-                e fico com a melhor combinação (selecionar) proxima fase
+                " aqui vai só pegar a população e dá uma nota com base na info acima"
+                
+                e fico com a melhor combinação (funçãoi selecionar) proxima fase
                 
                 se em 3 tentativas ele n chegar numa solução eu paro
                 '''
