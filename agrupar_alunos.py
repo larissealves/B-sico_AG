@@ -39,6 +39,14 @@ class Individuo():
         for g in range(len(caracteristicas_grupo)):
             for i in range(len(self.cromossomo)):
                 notaAluno = 0    
+                ''' os cromossomos = 1
+                desses quais realmente tem as caracteristicas definidas progrupo??
+                verifico e dou uma nota com base nisso. 
+                
+                e fico com a melhor combinação (selecionar) proxima fase
+                
+                se em 3 tentativas ele n chegar numa solução eu paro
+                '''
                 if (self.cromossomo[i] == '1') and (self.caracteristicas[i].count(caracteristicas_grupo[g])>=1):
                     notaAluno = self.caracteristicas[i].count(caracteristicas_grupo[g])
                     self.nota_avaliacao = notaAluno
