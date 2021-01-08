@@ -16,6 +16,7 @@ class Individuo():
         self.nome = nome
         #self.valores = valores
         self.limite_integrante_grupo = limite_integrante_grupo
+        self.alunos_no_grupo = 0
         self.grupo = grupo
         self.nota_avaliacao = 0
         self.geracao = geracao
@@ -34,8 +35,9 @@ class Individuo():
     #AVALIAR
     def avaliacao(self):
         qnt_caracteristicas_iguais = 0
-        notaPopulação = 0
+        notaPopulacao = 0
         soma_espaco_disponivel = 0
+        a = 0
         for g in range(len(caracteristicas_grupo)):
             for i in range(len(self.cromossomo)):
                 notaAluno = 0  
@@ -50,12 +52,27 @@ class Individuo():
                 
                 se em 3 tentativas ele n chegar numa solução eu paro
                 '''
-                if (self.cromossomo[i] == '1') and (self.caracteristicas[i].count(caracteristicas_grupo[g])>=1):
-                    notaAluno = self.caracteristicas[i].count(caracteristicas_grupo[g])
-                    self.nota_avaliacao = notaAluno
-                    print("\ncromossomo compativeis : ", self.nome[i], self.nota_avaliacao)
-                #se o  cromossomo tiver sido escolhido para esta população e tiver ao menos uma caracteristica
-                #compativel com as do grupo ele vai receber uma nota
+                if (self.cromossomo[i] == '1'):
+                    a += 1
+                    if a> self. limite_integrante_grupo:
+                        notaPopulacao = 1
+                        print('MUITOS INTEGRANTES - PESSIMA POP')
+                    else:
+                        # a é a quantidade de cromossomos = 1
+                        # verifico destes quais tem caracteristicas igual as requisitadas no grupo
+                        # conto essa caracteristicas por alunos e somo todas
+                        # 
+                        while (self.nota_avaliacao):
+                            if self.alunos_no_grupo < self.limite_integrante_grupo:
+                                nota_por_aluno = self.caracteristicas[i].count(caracteristicas_grupo[g])
+                                notaPopulacao += nota_por_aluno
+                                self.nota_avaliacao = notaPopulacao
+                            self.alunos_no_grupo = self.limite_integrante_grupo - a
+            print('\nespaco que sobrou', self.alunos_no_grupo )
+            print('\nTOTAL NOTA POPULAÇÃO:',   ' + ', self.nota_avaliacao)
+                        
+       
+                
          
 if __name__ == '__main__':
     #p1 = Produto("Iphone 6", 0.0000899, 2199.12)
@@ -76,7 +93,7 @@ if __name__ == '__main__':
     lista_produtos.append(Produto("Notebook Asus", 'D'))
       
     lista_grupos = []
-    lista_grupos.append(Grupo('B', 4))
+    lista_grupos.append(Grupo('B', 6))
     #lista_grupos.append(Grupo('A', 3))
     #lista_grupos.append(Grupo('C', 3))
 
@@ -89,7 +106,7 @@ for produto in lista_produtos:
     
 
 caracteristicas_grupo = []
-numero_integrantes_grupo = 4
+numero_integrantes_grupo = 6
 for grupo in lista_grupos:
     caracteristicas_grupo.append(grupo.caracteristicas_grupo)
    
@@ -108,3 +125,13 @@ print('-------------------------')
 n = 10
 k = 3
 print([(n // k) + (1 if i < (n % k) else 0) for i in range(k)])'''
+
+'''
+               
+if (self.cromossomo[i] == '1') and (self.caracteristicas[i].count(caracteristicas_grupo[g])>=1):
+                    notaAluno = self.caracteristicas[i].count(caracteristicas_grupo[g])
+                    self.nota_avaliacao = notaAluno
+                    print("\ncromossomo compativeis : ", self.nome[i], self.nota_avaliacao)
+                #se o  cromossomo tiver sido escolhido para esta população e tiver ao menos uma caracteristica
+                #compativel com as do grupo ele vai receber uma nota
+'''
