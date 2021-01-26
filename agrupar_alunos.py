@@ -1,4 +1,9 @@
-from random import random
+import random
+
+individuos = 20
+cromosomas = 6
+generaciones = 3
+
 class Produto():
     def __init__(self, nome, caracteristica):
         self.nome = nome
@@ -22,20 +27,36 @@ class Individuo():
         self.geracao = geracao
         self.cromossomo = []
         
+       
         #Gerar pop aleatoriamente
-        for i in range(len(caracteristicas)):
-            if random() < 0.5:
-                self.cromossomo.append("0")
-                
-            else:
-                self.cromossomo.append("1")  
-        print('CROMOSSOMOS: ',self.cromossomo)
+        #for i in range(len(caracteristicas)):
+          #  if random() < 0.5:
+         #       self.cromossomo.append("0") 
+          #  else:
+        #        self.cromossomo.append("1")  
+       # print('CROMOSSOMOS: ',self.cromossomo)
+      
+        # a variavel "a" é a quntidade de individuos 
+      
+        a = len(caracteristicas)
         
+        poblacion = [[0 for x in range(cromosomas)] for x in range(a)]
+      
+        
+        for ind in range(a):
+            for cromosoma in range(cromosomas):
+               poblacion[ind][cromosoma] = random.randint(0, 1)
+      
+        #Imprime población
+            
+        print("\nPopulação Inicial\n")
+        for individuo in range(a):
+            print(str(individuo) + " - [" + ", ".join(str(f) for f in poblacion[individuo]) + "]")
+
         
     #AVALIAR
     def avaliacao(self):
-        qnt_caracteristicas_iguais = 0
-        notaPopulacao = 0
+        #notaPopulacao = 0
         soma_espaco_disponivel = 0
         a = 0
         for g in range(len(caracteristicas_grupo)):
@@ -62,35 +83,38 @@ class Individuo():
                         # verifico destes quais tem caracteristicas igual as requisitadas no grupo
                         # conto essa caracteristicas por alunos e somo todas
                         # 
-                        while (self.nota_avaliacao):
-                            if self.alunos_no_grupo < self.limite_integrante_grupo:
-                                nota_por_aluno = self.caracteristicas[i].count(caracteristicas_grupo[g])
-                                notaPopulacao += nota_por_aluno
-                                self.nota_avaliacao = notaPopulacao
-                            self.alunos_no_grupo = self.limite_integrante_grupo - a
-            print('\nespaco que sobrou', self.alunos_no_grupo )
-            print('\nTOTAL NOTA POPULAÇÃO:',   ' + ', self.nota_avaliacao)
+                        if self.alunos_no_grupo < self.limite_integrante_grupo:
+                            nota_por_aluno = self.caracteristicas[i].count(caracteristicas_grupo[g])
+                            print('\nNOTA ALUNO: ', nota_por_aluno, '\n' )
+                            self.nota_avaliacao += nota_por_aluno
+                        self.alunos_no_grupo = self.limite_integrante_grupo - a
+            
+            print('\nESPAÇO LIVRE: ', self.alunos_no_grupo )
+            print('\nTOTAL NOTA POPULAÇÃO:', self.nota_avaliacao)
                         
-       
+        ''' gero varias pop,
+        
+        
+        '''
                 
          
 if __name__ == '__main__':
     #p1 = Produto("Iphone 6", 0.0000899, 2199.12)
     lista_produtos = []
-    lista_produtos.append(Produto("Geladeira Dako", 'A'))
-    lista_produtos.append(Produto("Iphone 6",'A'))
-    lista_produtos.append(Produto("TV 55' ", 'A'))
+    lista_produtos.append(Produto("Geladeira Dako", 'B'))
+    lista_produtos.append(Produto("Iphone 6",'B'))
+    lista_produtos.append(Produto("TV 55' ", 'B'))
     lista_produtos.append(Produto("TV 50' ", 'B, C, D, B, B'))
     lista_produtos.append(Produto("TV 42' ", 'B'))
     lista_produtos.append(Produto("Notebook Dell", 'B'))
     lista_produtos.append(Produto("Ventilador Panasonic", 'B'))
-    lista_produtos.append(Produto("Microondas Electrolux", 'C'))
-    lista_produtos.append(Produto("Microondas LG", 'C'))
-    lista_produtos.append(Produto("Microondas Panasonic", 'C'))
-    lista_produtos.append(Produto("Geladeira Brastemp", 'C'))
-    lista_produtos.append(Produto("Geladeira Consul", 'D'))
-    lista_produtos.append(Produto("Notebook Lenovo", 'D'))
-    lista_produtos.append(Produto("Notebook Asus", 'D'))
+    lista_produtos.append(Produto("Microondas Electrolux", 'B'))
+    lista_produtos.append(Produto("Microondas LG", 'B'))
+    lista_produtos.append(Produto("Microondas Panasonic", 'B'))
+    lista_produtos.append(Produto("Geladeira Brastemp", 'B'))
+    lista_produtos.append(Produto("Geladeira Consul", 'B'))
+    lista_produtos.append(Produto("Notebook Lenovo", 'B'))
+    lista_produtos.append(Produto("Notebook Asus", 'B'))
       
     lista_grupos = []
     lista_grupos.append(Grupo('B', 6))
