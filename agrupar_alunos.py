@@ -4,6 +4,7 @@ individuos = 20
 cromosomas = 6
 generaciones = 3
 
+
 class Produto():
     def __init__(self, nome, caracteristica):
         self.nome = nome
@@ -25,7 +26,7 @@ class Individuo():
         self.grupo = grupo
         self.nota_avaliacao = 0
         self.geracao = geracao
-        self.cromossomo = []
+        self.poblacion  = []
         
        
         #Gerar pop aleatoriamente
@@ -40,18 +41,20 @@ class Individuo():
       
         a = len(caracteristicas)
         
-        poblacion = [[0 for x in range(cromosomas)] for x in range(a)]
+       
+        
+        self.poblacion = [[0 for x in range(cromosomas)] for x in range(a)]
       
         
         for ind in range(a):
             for cromosoma in range(cromosomas):
-               poblacion[ind][cromosoma] = random.randint(0, 1)
+               self.poblacion[ind][cromosoma] = random.randint(0, 1)
       
         #Imprime población
             
         print("\nPopulação Inicial\n")
         for individuo in range(a):
-            print(str(individuo) + " - [" + ", ".join(str(f) for f in poblacion[individuo]) + "]")
+            print(str(individuo) + " - [" + ", ".join(str(f) for f in self.poblacion[individuo]) + "]")
 
         
     #AVALIAR
@@ -59,11 +62,27 @@ class Individuo():
         #notaPopulacao = 0
         soma_espaco_disponivel = 0
         a = 0
+        
+        aptitidao = [0 for i in range(len(caracteristicas))]
         for g in range(len(caracteristicas_grupo)):
-            for i in range(len(self.cromossomo)):
-                notaAluno = 0  
+            for i in range(len(self.poblacion)):
+                print(self.poblacion[i].index(0))
+        
+        '''
+        for g in range(len(caracteristicas_grupo)):
+            for i in range(len(poblacion)):
+                print(self.)
+        for g in range(len(caracteristicas_grupo)):
+            for i in range(len(caracteristicas)):
                 
-                ''' os cromossomos = 1
+                for cromosoma in range(cromosomas):
+                
+                    aptitidao[i] += poblacion[i][cromosoma]*1
+                
+                notaAluno = 0  
+            
+               
+                os cromossomos = 1
                 desses quais realmente tem as caracteristicas definidas progrupo??
                 verifico e dou uma nota com base nisso. 
                 
@@ -72,7 +91,7 @@ class Individuo():
                 e fico com a melhor combinação (funçãoi selecionar) proxima fase
                 
                 se em 3 tentativas ele n chegar numa solução eu paro
-                '''
+                
                 if (self.cromossomo[i] == '1'):
                     a += 1
                     if a> self. limite_integrante_grupo:
@@ -92,9 +111,6 @@ class Individuo():
             print('\nESPAÇO LIVRE: ', self.alunos_no_grupo )
             print('\nTOTAL NOTA POPULAÇÃO:', self.nota_avaliacao)
                         
-        ''' gero varias pop,
-        
-        
         '''
                 
          
