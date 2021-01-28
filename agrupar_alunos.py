@@ -26,7 +26,7 @@ class Individuo():
         self.grupo = grupo
         self.nota_avaliacao = 0
         self.geracao = geracao
-        self.poblacion  = []
+        self.cromossomo = []
         
        
         #Gerar pop aleatoriamente
@@ -41,32 +41,38 @@ class Individuo():
       
         a = len(caracteristicas)
         
-       
+        
         
         self.poblacion = [[0 for x in range(cromosomas)] for x in range(a)]
       
         
-        for ind in range(a):
-            for cromosoma in range(cromosomas):
-               self.poblacion[ind][cromosoma] = random.randint(0, 1)
+        for i in range(len(caracteristicas)):
+            for l in range (cromosomas):
+                self.poblacion[i][l] = random.randint(0, 1)
+            
+        print(self.poblacion)
+         
       
         #Imprime población
-            
+        '''    
         print("\nPopulação Inicial\n")
         for individuo in range(a):
             print(str(individuo) + " - [" + ", ".join(str(f) for f in self.poblacion[individuo]) + "]")
-
+        '''
         
     #AVALIAR
     def avaliacao(self):
         #notaPopulacao = 0
         soma_espaco_disponivel = 0
         a = 0
-        
+        o = []
         aptitidao = [0 for i in range(len(caracteristicas))]
         for g in range(len(caracteristicas_grupo)):
             for i in range(len(self.poblacion)):
-                print(self.poblacion[i].index(0))
+                print('\niiii\n', self.poblacion[i])
+                for a in self.poblacion[i]:
+                    print(a)
+            
         
         '''
         for g in range(len(caracteristicas_grupo)):
