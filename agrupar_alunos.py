@@ -1,10 +1,5 @@
 from random import random
 
-individuos = 20
-cromosomas = 6
-generaciones = 3
-
-
 class Produto():
     def __init__(self, nome, caracteristica):
         self.nome = nome
@@ -49,19 +44,19 @@ class Individuo():
                 if(self.cromossomo[i]=='1'):
                     quantidade_cromossomos_1 += 1
                     if  quantidade_cromossomos_1 > self. limite_integrante_grupo:
-                        print('GRANDE')
+                        self.nota_avaliacao = 1
                     else:
                         nota_por_aluno =  self.caracteristicas[i].count(caracteristicas_grupo[g])
                         self.nota_avaliacao += nota_por_aluno 
                     #self.alunos_no_grupo = self.limite_integrante_grupo - quantidade_cromossomos_1 #diminuir espacoes disponiveis no grupo
-        #print('\n', self.cromossomo, '= ', self.nota_avaliacao, '\n')
+        print('\n', self.cromossomo, '= ', self.nota_avaliacao, '\n')
                     
                 
     def crossover(self, outro_individuo):
-        print('\noutro', outro_individuo.cromossomo)
-        print('\ncromo 1', self.cromossomo)
+        #print('\noutro', outro_individuo.cromossomo)
+        #print('\ncromo 1', self.cromossomo)
         corte = round(random()  * len(self.cromossomo))
-        print('\nPonto de corte', corte)
+        #print('\nPonto de corte', corte)
        
         filho1 = outro_individuo.cromossomo[0:corte] + self.cromossomo[corte::]
         filho2 = self.cromossomo[0:corte] + outro_individuo.cromossomo[corte::]
@@ -70,8 +65,8 @@ class Individuo():
                   Individuo(self.nome, self.caracteristicas, self.limite_integrante_grupo, self.grupo, self.geracao + 1)]
         filhos[0].cromossomo = filho1
         filhos[1].cromossomo = filho2
-        print('\nFilho 1', filho1)
-        print('\nFilho 2', filho2)
+        #print('\nFilho 1', filho1)
+        #print('\nFilho 2', filho2)
         return filhos
                    
     def mutacao(self, taxa_mutacao):
@@ -85,6 +80,21 @@ class Individuo():
        # print("Depois %s " % self.cromossomo)
         return self
     
+    
+class AlgoritmoGenetico():
+    def __init__(self, tamanho_populacao):
+        self.tamanho_populacao = tamanho_populacao
+        self.populacao = []
+        self.geracao = 0
+        self.melhor_solucao = 0
+        
+    def inicializa_populacao(self, nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo):
+        for i in range(self.tamanho_populacao):
+            self.populacao.append(Individuo(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo))
+        self.melhor_solucao = self.populacao[0]
+        
+        
+        
 if __name__ == '__main__':
     #p1 = Produto("Iphone 6", 0.0000899, 2199.12)
     lista_produtos = []
@@ -108,6 +118,25 @@ if __name__ == '__main__':
     #lista_grupos.append(Grupo('A', 3))
     #lista_grupos.append(Grupo('C', 3))
 
+
+
+        
+'''
+print('-------------------------')
+n = 10
+k = 3
+print([(n // k) + (1 if i < (n % k) else 0) for i in range(k)])
+
+
+if (self.cromossomo[i] == '1') and (self.caracteristicas[i].count(caracteristicas_grupo[g])>=1):
+                    notaAluno = self.caracteristicas[i].count(caracteristicas_grupo[g])
+                    self.nota_avaliacao = notaAluno
+                    print("\ncromossomo compativeis : ", self.nome[i], self.nota_avaliacao)
+                #se o  cromossomo tiver sido escolhido para esta população e tiver ao menos uma caracteristica
+                #compativel com as do grupo ele vai receber uma nota
+'''
+
+
 nome = []
 caracteristicas = []
 grupo = []
@@ -121,7 +150,7 @@ numero_integrantes_grupo = 6
 for grupo in lista_grupos:
     caracteristicas_grupo.append(grupo.caracteristicas_grupo)
    
-    
+'''    
 individuo1 = Individuo(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo)
 individuo1.avaliacao()   
 
@@ -135,22 +164,15 @@ individuo1.crossover(individuo2)
 
 individuo1.mutacao(0.05)
 individuo2.mutacao(0.05)
-        
-
+'''
 print('\nGRUPO MOMENTO:',caracteristicas_grupo)
-        
-'''
-print('-------------------------')
-n = 10
-k = 3
-print([(n // k) + (1 if i < (n % k) else 0) for i in range(k)])'''
 
-'''
-               
-if (self.cromossomo[i] == '1') and (self.caracteristicas[i].count(caracteristicas_grupo[g])>=1):
-                    notaAluno = self.caracteristicas[i].count(caracteristicas_grupo[g])
-                    self.nota_avaliacao = notaAluno
-                    print("\ncromossomo compativeis : ", self.nome[i], self.nota_avaliacao)
-                #se o  cromossomo tiver sido escolhido para esta população e tiver ao menos uma caracteristica
-                #compativel com as do grupo ele vai receber uma nota
-'''
+tamanho_populacao = 20
+ag = AlgoritmoGenetico(tamanho_populacao)
+ag.inicializa_populacao(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo)
+for i in range(ag.tamanho_populacao):
+    print("*** Indivíduo %s ****\n" % i, "Nome = %s\n" % str(ag.populacao[i].nome),"Caracteristicas = %s\n" % str(ag.populacao[i].caracteristicas))
+
+
+
+
