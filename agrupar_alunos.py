@@ -1,4 +1,4 @@
-import random
+from random import random
 
 individuos = 20
 cromosomas = 6
@@ -29,109 +29,74 @@ class Individuo():
         self.cromossomo = []
         
        
-        #Gerar pop aleatoriamente
-        #for i in range(len(caracteristicas)):
-          #  if random() < 0.5:
-         #       self.cromossomo.append("0") 
-          #  else:
-        #        self.cromossomo.append("1")  
-       # print('CROMOSSOMOS: ',self.cromossomo)
-      
-        # a variavel "a" é a quntidade de individuos 
-      
-        a = len(caracteristicas)
-        
-        
-        
-        self.poblacion = [[0 for x in range(cromosomas)] for x in range(a)]
-      
-        
         for i in range(len(caracteristicas)):
-            for l in range (cromosomas):
-                self.poblacion[i][l] = random.randint(0, 1)
-            
-        print(self.poblacion)
-         
+            if random() < 0.5:
+                self.cromossomo.append("0") 
+            else:
+                self.cromossomo.append("1")  
       
-        #Imprime población
-        '''    
-        print("\nPopulação Inicial\n")
-        for individuo in range(a):
-            print(str(individuo) + " - [" + ", ".join(str(f) for f in self.poblacion[individuo]) + "]")
-        '''
         
     #AVALIAR
     def avaliacao(self):
-        #notaPopulacao = 0
+        quantidade_cromossomos_1 = 0        
         soma_espaco_disponivel = 0
-        a = 0
-        o = []
-        aptitidao = [0 for i in range(len(caracteristicas))]
-        for g in range(len(caracteristicas_grupo)):
-            for i in range(len(self.poblacion)):
-                print('\niiii\n', self.poblacion[i])
-                for a in self.poblacion[i]:
-                    print(a)
-            
-        
-        '''
-        for g in range(len(caracteristicas_grupo)):
-            for i in range(len(poblacion)):
-                print(self.)
-        for g in range(len(caracteristicas_grupo)):
-            for i in range(len(caracteristicas)):
-                
-                for cromosoma in range(cromosomas):
-                
-                    aptitidao[i] += poblacion[i][cromosoma]*1
-                
-                notaAluno = 0  
-            
-               
-                os cromossomos = 1
-                desses quais realmente tem as caracteristicas definidas progrupo??
-                verifico e dou uma nota com base nisso. 
-                
-                " aqui vai só pegar a população e dá uma nota com base na info acima"
-                
-                e fico com a melhor combinação (funçãoi selecionar) proxima fase
-                
-                se em 3 tentativas ele n chegar numa solução eu paro
-                
-                if (self.cromossomo[i] == '1'):
-                    a += 1
-                    if a> self. limite_integrante_grupo:
-                        notaPopulacao = 1
-                        print('MUITOS INTEGRANTES - PESSIMA POP')
-                    else:
-                        # a é a quantidade de cromossomos = 1
-                        # verifico destes quais tem caracteristicas igual as requisitadas no grupo
-                        # conto essa caracteristicas por alunos e somo todas
-                        # 
-                        if self.alunos_no_grupo < self.limite_integrante_grupo:
-                            nota_por_aluno = self.caracteristicas[i].count(caracteristicas_grupo[g])
-                            print('\nNOTA ALUNO: ', nota_por_aluno, '\n' )
-                            self.nota_avaliacao += nota_por_aluno
-                        self.alunos_no_grupo = self.limite_integrante_grupo - a
-            
-            print('\nESPAÇO LIVRE: ', self.alunos_no_grupo )
-            print('\nTOTAL NOTA POPULAÇÃO:', self.nota_avaliacao)
-                        
-        '''
-                
+       
          
+        for g in range(len(caracteristicas_grupo)):
+           
+            for i in range(len(caracteristicas)):
+                 
+                if(self.cromossomo[i]=='1'):
+                    quantidade_cromossomos_1 += 1
+                    if  quantidade_cromossomos_1 > self. limite_integrante_grupo:
+                        print('GRANDE')
+                    else:
+                        nota_por_aluno =  self.caracteristicas[i].count(caracteristicas_grupo[g])
+                        self.nota_avaliacao += nota_por_aluno 
+                    #self.alunos_no_grupo = self.limite_integrante_grupo - quantidade_cromossomos_1 #diminuir espacoes disponiveis no grupo
+        #print('\n', self.cromossomo, '= ', self.nota_avaliacao, '\n')
+                    
+                
+    def crossover(self, outro_individuo):
+        print('\noutro', outro_individuo.cromossomo)
+        print('\ncromo 1', self.cromossomo)
+        corte = round(random()  * len(self.cromossomo))
+        print('\nPonto de corte', corte)
+       
+        filho1 = outro_individuo.cromossomo[0:corte] + self.cromossomo[corte::]
+        filho2 = self.cromossomo[0:corte] + outro_individuo.cromossomo[corte::]
+        
+        filhos = [Individuo(self.nome, self.caracteristicas, self.limite_integrante_grupo, self.grupo, self.geracao + 1),
+                  Individuo(self.nome, self.caracteristicas, self.limite_integrante_grupo, self.grupo, self.geracao + 1)]
+        filhos[0].cromossomo = filho1
+        filhos[1].cromossomo = filho2
+        print('\nFilho 1', filho1)
+        print('\nFilho 2', filho2)
+        return filhos
+                   
+    def mutacao(self, taxa_mutacao):
+        #("\nAntes %s " % self.cromossomo, '\n')
+        for i in range(len(self.cromossomo)):
+            if random() < taxa_mutacao:
+                if self.cromossomo[i] == '1':
+                    self.cromossomo[i] = '0'
+                else:
+                    self.cromossomo[i] = '1'
+       # print("Depois %s " % self.cromossomo)
+        return self
+    
 if __name__ == '__main__':
     #p1 = Produto("Iphone 6", 0.0000899, 2199.12)
     lista_produtos = []
     lista_produtos.append(Produto("Geladeira Dako", 'B'))
     lista_produtos.append(Produto("Iphone 6",'B'))
-    lista_produtos.append(Produto("TV 55' ", 'B'))
+    lista_produtos.append(Produto("TV 55' ", 'd'))
     lista_produtos.append(Produto("TV 50' ", 'B, C, D, B, B'))
     lista_produtos.append(Produto("TV 42' ", 'B'))
     lista_produtos.append(Produto("Notebook Dell", 'B'))
     lista_produtos.append(Produto("Ventilador Panasonic", 'B'))
     lista_produtos.append(Produto("Microondas Electrolux", 'B'))
-    lista_produtos.append(Produto("Microondas LG", 'B'))
+    lista_produtos.append(Produto("Microondas LG", 'B, B'))
     lista_produtos.append(Produto("Microondas Panasonic", 'B'))
     lista_produtos.append(Produto("Geladeira Brastemp", 'B'))
     lista_produtos.append(Produto("Geladeira Consul", 'B'))
@@ -149,7 +114,7 @@ grupo = []
 for produto in lista_produtos:
     caracteristicas.append(produto.caracteristica)
     nome.append(produto.nome)
-    
+   
 
 caracteristicas_grupo = []
 numero_integrantes_grupo = 6
@@ -157,12 +122,20 @@ for grupo in lista_grupos:
     caracteristicas_grupo.append(grupo.caracteristicas_grupo)
    
     
-    
-    
 individuo1 = Individuo(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo)
-
 individuo1.avaliacao()   
+
+
+individuo2 = Individuo(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo)
+individuo2.avaliacao()   
+
 grupo1 = Grupo(caracteristicas_grupo, numero_integrantes_grupo)
+
+individuo1.crossover(individuo2)
+
+individuo1.mutacao(0.05)
+individuo2.mutacao(0.05)
+        
 
 print('\nGRUPO MOMENTO:',caracteristicas_grupo)
         
