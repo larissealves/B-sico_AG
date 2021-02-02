@@ -93,6 +93,81 @@ class AlgoritmoGenetico():
             self.populacao.append(Individuo(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo))
         self.melhor_solucao = self.populacao[0]
         
+    def ordena_populacao(self):
+        self.populacao = sorted(self.populacao,
+                                key = lambda populacao: populacao.nota_avaliacao,
+                                reverse = True)
+        
+    def melhor_individuo(self, individuo):
+        if individuo.nota_avaliacao > self.melhor_solucao.nota_avaliacao:
+            self.melhor_solucao = individuo
+        
+    def soma_avaliacoes(self):
+        soma = 0
+        for individuo in self.populacao:
+           soma += individuo.nota_avaliacao
+        return soma
+        
+    def seleciona_pai(self, soma_avaliacao):
+        pai = -1
+        valor_sorteado = random() * soma_avaliacao
+        soma = 0
+        i = 0
+        while i < len(self.populacao) and soma < valor_sorteado:
+            soma += self.populacao[i].nota_avaliacao
+            pai += 1
+            i += 1
+        return pai
+    
+    def visualiza_geracao(self):
+        melhor = self.populacao[0]
+        print("G:%s -> Valor: %s Espaço: %s Cromossomo: %s" % (self.populacao[0].geracao,
+                                                               melhor.nota_avaliacao,
+                                                               melhor.nome,
+                                                               melhor.cromossomo))
+    def resolver(self, taxa_mutacao, numero_geracoes, nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo):
+        self.inicializa_populacao(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo)
+        
+        for individuo in self.populacao:
+            individuo.avaliacao()
+        
+        self.ordena_populacao()
+        
+        self.visualiza_geracao()
+        
+        for geracao in range(numero_geracoes):
+            soma_avaliacao = self.soma_avaliacoes()
+            nova_populacao = []
+            
+            for individuos_gerados in range(0, self.tamanho_populacao, 2):
+                pai1 = self.seleciona_pai(soma_avaliacao)
+                pai2 = self.seleciona_pai(soma_avaliacao)
+                
+                filhos = self.populacao[pai1].crossover(self.populacao[pai2])
+                
+                nova_populacao.append(filhos[0].mutacao(taxa_mutacao))
+                nova_populacao.append(filhos[1].mutacao(taxa_mutacao))
+            
+            self.populacao = list(nova_populacao)
+            
+            for individuo in self.populacao:
+                individuo.avaliacao()
+            
+            self.ordena_populacao()
+            
+            self.visualiza_geracao()
+            
+            melhor = self.populacao[0]
+            self.melhor_individuo(melhor)
+        
+        print("\nMelhor solução -> G: %s Valor: %s Espaço: %s Cromossomo: %s" %
+              (self.melhor_solucao.geracao,
+               self.melhor_solucao.nota_avaliacao,
+               self.melhor_solucao.nome,
+               self.melhor_solucao.cromossomo))
+        
+        return self.melhor_solucao.cromossomo
+        
         
         
 if __name__ == '__main__':
@@ -121,20 +196,6 @@ if __name__ == '__main__':
 
 
         
-'''
-print('-------------------------')
-n = 10
-k = 3
-print([(n // k) + (1 if i < (n % k) else 0) for i in range(k)])
-
-
-if (self.cromossomo[i] == '1') and (self.caracteristicas[i].count(caracteristicas_grupo[g])>=1):
-                    notaAluno = self.caracteristicas[i].count(caracteristicas_grupo[g])
-                    self.nota_avaliacao = notaAluno
-                    print("\ncromossomo compativeis : ", self.nome[i], self.nota_avaliacao)
-                #se o  cromossomo tiver sido escolhido para esta população e tiver ao menos uma caracteristica
-                #compativel com as do grupo ele vai receber uma nota
-'''
 
 
 nome = []
@@ -150,7 +211,63 @@ numero_integrantes_grupo = 6
 for grupo in lista_grupos:
     caracteristicas_grupo.append(grupo.caracteristicas_grupo)
    
+
+print('\nGRUPO MOMENTO:',caracteristicas_grupo, '\n')
+
+tamanho_populacao = 20
+ag = AlgoritmoGenetico(tamanho_populacao)
+ag.inicializa_populacao(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo)
+for individuo in ag.populacao:
+    individuo.avaliacao()
+    ag.ordena_populacao()
+    ag.melhor_individuo(ag.populacao[0])
+    
+for i in range(ag.tamanho_populacao):
+    print("*** Indivíduo %s ****\n" % i, 
+          "Nome = %s\n" % str(ag.populacao[i].nome),
+          "Caracteristicas = %s\n" % str(ag.populacao[i].caracteristicas),
+          "Cromossomo = %s\n" % str(ag.populacao[i].cromossomo), '\n')
+    
+print("Melhor solução para o problema: %s" % ag.melhor_solucao.cromossomo,
+          "Nota = %s\n" % ag.melhor_solucao.nota_avaliacao)
+        
+soma = ag.soma_avaliacoes()
+print("Soma das avaliações: %s" % soma)
+        
+nova_populacao = []
+taxa_mutacao = 0.01
+numero_geracoes = 100
+for individuos_gerados in range(0, ag.tamanho_populacao, 2):
+    pai1 = ag.seleciona_pai(soma)
+    pai2 = ag.seleciona_pai(soma)
+        
+    filhos = ag.populacao[pai1].crossover(ag.populacao[pai2])
+    nova_populacao.append(filhos[0].mutacao(taxa_mutacao))
+    nova_populacao.append(filhos[1].mutacao(taxa_mutacao))
+        
+ag.populacao = list(nova_populacao)
+for individuo in ag.populacao:
+    individuo.avaliacao()
+ag.ordena_populacao()
+ag.melhor_individuo(ag.populacao[0])        
+soma = ag.soma_avaliacoes()
+print("Melhor: %s" % ag.melhor_solucao.cromossomo, "Valor: %s\n" % ag.melhor_solucao.nota_avaliacao)
+        
+        
+numero_geracoes = 100
+ag = AlgoritmoGenetico(tamanho_populacao)
+resultado = ag.resolver(taxa_mutacao, numero_geracoes, nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo)
+for i in range(len(lista_produtos)):
+    if resultado[i] == '1':
+        print('\n', lista_produtos[i].nome, ' = ', lista_produtos[i].caracteristica)
+               
+    
+        
+
 '''    
+
+
+      
 individuo1 = Individuo(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo)
 individuo1.avaliacao()   
 
@@ -165,14 +282,20 @@ individuo1.crossover(individuo2)
 individuo1.mutacao(0.05)
 individuo2.mutacao(0.05)
 '''
-print('\nGRUPO MOMENTO:',caracteristicas_grupo)
 
-tamanho_populacao = 20
-ag = AlgoritmoGenetico(tamanho_populacao)
-ag.inicializa_populacao(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo)
-for i in range(ag.tamanho_populacao):
-    print("*** Indivíduo %s ****\n" % i, "Nome = %s\n" % str(ag.populacao[i].nome),"Caracteristicas = %s\n" % str(ag.populacao[i].caracteristicas))
+'''
+print('-------------------------')
+n = 10
+k = 3
+print([(n // k) + (1 if i < (n % k) else 0) for i in range(k)])
 
 
+if (self.cromossomo[i] == '1') and (self.caracteristicas[i].count(caracteristicas_grupo[g])>=1):
+                    notaAluno = self.caracteristicas[i].count(caracteristicas_grupo[g])
+                    self.nota_avaliacao = notaAluno
+                    print("\ncromossomo compativeis : ", self.nome[i], self.nota_avaliacao)
+                #se o  cromossomo tiver sido escolhido para esta população e tiver ao menos uma caracteristica
+                #compativel com as do grupo ele vai receber uma nota
+'''
 
 
