@@ -48,57 +48,46 @@ class Individuo():
                     
 
             
-        #print("\n", self.cromossomo)
+        
                             
        
-        
-    '''
-    cont = 1
-    while cont == self.limite_integrante_grupo
-            for i in range(len(caracteristicas)):
-            if random() < 0.5:
-                self.cromossomo.append("0") 
-            else:
-                self.cromossomo.append("1")  
-        #print("\naaaa i:", self.limite_integrante_grupo, "\n")
-    '''      
+  
     #AVALIAR
     def avaliacao(self):
         
         quantidade_cromossomos_1 = 0        
         soma_espaco_disponivel = 0
         nota_por_aluno = 0
-       
+
+        
         for g in range(len(caracteristicas_grupo)):
             
             for i in range(len(caracteristicas)):
                  
                 if(self.cromossomo[i]=='1'):
-                    quantidade_cromossomos_1 += 1
+
+                  
                     if self.caracteristicas[i].count(caracteristicas_grupo[g])== 0:
-                        #print("0 CARACTERISTICAS1")
+                                #print("0 CARACTERISTICAS1")
                         nota_por_aluno = 0
                     if self.caracteristicas[i].count(caracteristicas_grupo[g])== 1:
-                        #print("1 CARACTERISTICAS")
-                        nota_por_aluno = 1 
+                                #print("1 CARACTERISTICAS")
+                        nota_por_aluno = 2 
                     if self.caracteristicas[i].count(caracteristicas_grupo[g])> 2:
-                        #print("2 ou + CARACTERISTICAS1")
-                        nota_por_aluno = 2
-                        #nota_por_aluno =  self.caracteristicas[i].count(caracteristicas_grupo[g])
-        
-                    self.nota_avaliacao += nota_por_aluno 
+                                #print("2 ou + CARACTERISTICAS1")
+                        nota_por_aluno = 6
+                                #nota_por_aluno =  self.caracteristicas[i].count(caracteristicas_grupo[g])
+                
+
+               
+            self.nota_avaliacao += nota_por_aluno 
                     #self.alunos_no_grupo = self.limite_integrante_grupo - quantidade_cromossomos_1 #diminuir espacoes disponiveis no grupo
        # print('\n', self.cromossomo, '= ', self.nota_avaliacao, '\n')
         
                   
           
     
-    def ordena_cromossomo(self):
-         self.populacao = sorted(self.populacao,
-                                key = lambda populacao: populacao.nota_avaliacao,
-                                reverse = True)
-    
-    
+   
     def crossover(self, outro_individuo):
         #print('\noutro', outro_individuo.cromossomo)
         #print('\ncromo 1', self.cromossomo)
@@ -312,11 +301,10 @@ soma = ag.soma_avaliacoes()
 print("Melhor: %s" % ag.melhor_solucao.cromossomo, "Valor: %s\n" % ag.melhor_solucao.nota_avaliacao)
 ''' 
 cont = 0     
-tamanho_populacao = 1
-taxa_mutacao = 0.01
-numero_geracoes = 1
+tamanho_populacao = 20
+taxa_mutacao = 0.00
+numero_geracoes = 100
 
-numero_integrante = 0
 
 for i in range(len(caracteristicas_grupo)):
         
@@ -327,6 +315,7 @@ for i in range(len(caracteristicas_grupo)):
     print('-'*70)
     for i in range(len(lista_produtos)):
         if resultado[i] == '1':
+            
             melhores_solucoes.append(lista_produtos[i].nome)
             print('\n \n', lista_produtos[i].nome, ' = ', lista_produtos[i].caracteristica)
             print('\n')
