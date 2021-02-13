@@ -25,23 +25,49 @@ class Individuo():
         self.nota_avaliacao = 0
         self.geracao = geracao
         self.cromossomo = []
-        global grupo_momento
         
         
-       
+        a = 0
+        #print(limite_integrante_grupo)
         for i in range(len(caracteristicas)):
+            if random() < 0.5:
+                self.cromossomo.append("0")
+            else:
+                self.cromossomo.append("1")
+        
+            if self.cromossomo[i] == '1':
+                a +=1
+                    
+            if a > self.limite_integrante_grupo:
+                if self.cromossomo[i] == '1':
+                    self.cromossomo[i] = '0'
+
+                if a < self.limite_integrante_grupo:
+                    if self.cromossomo[i] == '0':
+                        self.cromossomo[i] = '1'
+                    
+
+            
+        #print("\n", self.cromossomo)
+                            
+       
+        
+    '''
+    cont = 1
+    while cont == self.limite_integrante_grupo
+            for i in range(len(caracteristicas)):
             if random() < 0.5:
                 self.cromossomo.append("0") 
             else:
                 self.cromossomo.append("1")  
-      
-            
+        #print("\naaaa i:", self.limite_integrante_grupo, "\n")
+    '''      
     #AVALIAR
     def avaliacao(self):
         
         quantidade_cromossomos_1 = 0        
         soma_espaco_disponivel = 0
-        
+        nota_por_aluno = 0
        
         for g in range(len(caracteristicas_grupo)):
             
@@ -49,15 +75,21 @@ class Individuo():
                  
                 if(self.cromossomo[i]=='1'):
                     quantidade_cromossomos_1 += 1
-                    if  quantidade_cromossomos_1 > self.limite_integrante_grupo[g]:
-                        self.nota_avaliacao = 1
-                    else:
-
-                        nota_por_aluno =  self.caracteristicas[i].count(caracteristicas_grupo[g])
-                        
-                        self.nota_avaliacao += nota_por_aluno 
+                    if self.caracteristicas[i].count(caracteristicas_grupo[g])== 0:
+                        #print("0 CARACTERISTICAS1")
+                        nota_por_aluno = 0
+                    if self.caracteristicas[i].count(caracteristicas_grupo[g])== 1:
+                        #print("1 CARACTERISTICAS")
+                        nota_por_aluno = 1 
+                    if self.caracteristicas[i].count(caracteristicas_grupo[g])> 2:
+                        #print("2 ou + CARACTERISTICAS1")
+                        nota_por_aluno = 2
+                        #nota_por_aluno =  self.caracteristicas[i].count(caracteristicas_grupo[g])
+        
+                    self.nota_avaliacao += nota_por_aluno 
                     #self.alunos_no_grupo = self.limite_integrante_grupo - quantidade_cromossomos_1 #diminuir espacoes disponiveis no grupo
-        print('\n', self.cromossomo, '= ', self.nota_avaliacao, '\n')
+       # print('\n', self.cromossomo, '= ', self.nota_avaliacao, '\n')
+        
                   
           
     
@@ -106,9 +138,9 @@ class AlgoritmoGenetico():
         self.geracao = 0
         self.melhor_solucao = 0
         
-    def inicializa_populacao(self, nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo):
+    def inicializa_populacao(self, nome, caracteristicas, limite_integrante_grupo, caracteristicas_grupo):
         for i in range(self.tamanho_populacao):
-            self.populacao.append(Individuo(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo))
+            self.populacao.append(Individuo(nome, caracteristicas, limite_integrante_grupo, caracteristicas_grupo))
         self.melhor_solucao = self.populacao[0]
    
     
@@ -141,12 +173,14 @@ class AlgoritmoGenetico():
     
     def visualiza_geracao(self):
         melhor = self.populacao[0]
+        '''
         print("G:%s -> Valor: %s Espaço: %s Cromossomo: %s" % (self.populacao[0].geracao,
                                                                melhor.nota_avaliacao,
                                                                melhor.nome,
                                                                melhor.cromossomo))
-    def resolver(self, taxa_mutacao, numero_geracoes, nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo):
-        self.inicializa_populacao(nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo)
+        '''
+    def resolver(self, taxa_mutacao, numero_geracoes, nome, caracteristicas, limite_integrante_grupo, caracteristicas_grupo):
+        self.inicializa_populacao(nome, caracteristicas, limite_integrante_grupo, caracteristicas_grupo)
         
 
         for individuo in self.populacao:
@@ -194,27 +228,28 @@ class AlgoritmoGenetico():
         
         
 if __name__ == '__main__':
-    #p1 = Produto("Iphone 6", 0.0000899, 2199.12)
+   
     lista_produtos = []
     lista_produtos.append(Produto("Geladeira Dako", 'B'))
     lista_produtos.append(Produto("Iphone 6",'B'))
-    lista_produtos.append(Produto("TV 55' ", 'B'))
+    lista_produtos.append(Produto("TV 55' ", 'A'))
     lista_produtos.append(Produto("TV 50' ", 'B, C, D, B, B'))
     lista_produtos.append(Produto("TV 42' ", 'B'))
-    lista_produtos.append(Produto("Notebook Dell", 'B'))
+    lista_produtos.append(Produto("Notebook Dell", 'C'))
     lista_produtos.append(Produto("Ventilador Panasonic", 'A'))
     lista_produtos.append(Produto("Microondas Electrolux", 'A'))
     lista_produtos.append(Produto("Microondas LG", 'A, A'))
     lista_produtos.append(Produto("Microondas Panasonic", 'C'))
     lista_produtos.append(Produto("Geladeira Brastemp", 'C'))
-    lista_produtos.append(Produto("Geladeira Consul", 'C'))
+    lista_produtos.append(Produto("Geladeira Consul", 'D'))
     lista_produtos.append(Produto("Notebook Lenovo", 'B'))
-    lista_produtos.append(Produto("Notebook Asus", 'C'))
+    lista_produtos.append(Produto("Notebook Asus", 'D'))
       
     lista_grupos = []
     lista_grupos.append(Grupo('B', 6))
     lista_grupos.append(Grupo('A', 3))
     lista_grupos.append(Grupo('C', 3))
+    lista_grupos.append(Grupo('D', 2))
 
 
 
@@ -237,8 +272,6 @@ for grupo in lista_grupos:
     numero_integrantes_grupo.append(grupo.numero_integrantes_grupo)
     #print(grupo.numero_integrantes_grupo)
    
-
-#print('\nGRUPO MOMENTO:',caracteristicas_grupo, '\n')
 
 
 '''   
@@ -279,19 +312,27 @@ soma = ag.soma_avaliacoes()
 print("Melhor: %s" % ag.melhor_solucao.cromossomo, "Valor: %s\n" % ag.melhor_solucao.nota_avaliacao)
 ''' 
 cont = 0     
-tamanho_populacao = 20
+tamanho_populacao = 1
 taxa_mutacao = 0.01
-numero_geracoes = 3
+numero_geracoes = 1
+
+numero_integrante = 0
+
 for i in range(len(caracteristicas_grupo)):
+        
     ag = AlgoritmoGenetico(tamanho_populacao)
-    resultado = ag.resolver(taxa_mutacao, numero_geracoes, nome, caracteristicas, numero_integrantes_grupo, caracteristicas_grupo[i])
-    print('Grupo aqui', caracteristicas_grupo[i])
+    resultado = ag.resolver(taxa_mutacao, numero_geracoes, nome, caracteristicas, numero_integrantes_grupo[i], caracteristicas_grupo[i])
+    print('*'*70)
+    print('\n       GRUPO: ', caracteristicas_grupo[i], "->", " QNT Integrantes:", numero_integrantes_grupo[i], "       ")
+    print('-'*70)
     for i in range(len(lista_produtos)):
         if resultado[i] == '1':
             melhores_solucoes.append(lista_produtos[i].nome)
-            print('\n', lista_produtos[i].nome, ' = ', lista_produtos[i].caracteristica)
-             
-    
+            print('\n \n', lista_produtos[i].nome, ' = ', lista_produtos[i].caracteristica)
+            print('\n')
+   
+                         
+                
         
 
 '''    
@@ -327,5 +368,5 @@ if (self.cromossomo[i] == '1') and (self.caracteristicas[i].count(caracteristica
                 #compativel com as do grupo ele vai receber uma nota
 '''
 
-print('\n', melhores_solucoes)
+#print('\n', melhores_solucoes)
 
